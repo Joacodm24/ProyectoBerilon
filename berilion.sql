@@ -1,6 +1,6 @@
 -- Crear la base de datos
-CREATE DATABASE berilon;
-USE berilon;
+CREATE DATABASE berilion;
+USE berilion;
 
 -- Tabla: Gestionar Cliente
 CREATE TABLE Cliente (
