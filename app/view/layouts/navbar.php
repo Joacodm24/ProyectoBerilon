@@ -17,8 +17,8 @@
             Registrar Datos
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/cliente">Gestionar Cliente</a></li>
-            <li><a class="dropdown-item" href="/tecnico">Gestionar Personal Técnico</a></li>
+            <a class="dropdown-item" href="?pagina=clientes">Gestionar Cliente</a>
+            <li><a class="dropdown-item" href="?pagina=tecnicos">Gestionar Personal Técnico</a></li>
           </ul>
         </li>
 
