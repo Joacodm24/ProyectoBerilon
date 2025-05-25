@@ -17,8 +17,8 @@
             Registrar Datos
           </a>
           <ul class="dropdown-menu">
-            <a class="dropdown-item" href="?pagina=clientes">Gestionar Cliente</a>
-            <li><a class="dropdown-item" href="?pagina=tecnicos">Gestionar Personal Técnico</a></li>
+            <a class="dropdown-item" href="?pagina=Clientes">Gestionar Cliente</a>
+            <li><a class="dropdown-item" href="?pagina=Tecnicos">Gestionar Personal Técnico</a></li>
           </ul>
         </li>
 
@@ -27,9 +27,9 @@
             Gestionar Datos
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="?pagina=solicitudes">Gestionar Solicitudes</a></li>
-            <li><a class="dropdown-item" href="?pagina=recursos">Gestionar Recursos Tecnológicos</a></li>
-            <li><a class="dropdown-item" href="?pagina=talleres">Gestión de Talleres</a></li>
+            <li><a class="dropdown-item" href="?pagina=Solicitudes">Gestionar Solicitudes</a></li>
+            <li><a class="dropdown-item" href="?pagina=Recursos">Gestionar Recursos Tecnológicos</a></li>
+            <li><a class="dropdown-item" href="?pagina=Talleres">Gestión de Talleres</a></li>
           </ul>
         </li>
         <li class="nav-item">
