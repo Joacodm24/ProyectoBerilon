@@ -72,7 +72,7 @@
                 <table id="tablaUsuarios" class="table table-bordered table-hover table-striped align-middle mb-0 display nowrap" style="width:100%">
                     <thead class="table-dark text-center">
                         <tr>
-                            <!-- <th>ID</th> -->
+                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Usuario</th>
                             <th>Contraseña</th>

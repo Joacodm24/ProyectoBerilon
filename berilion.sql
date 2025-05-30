@@ -62,6 +62,7 @@ CREATE TABLE Talleres (
     hora TIME
 );
 
+-- Crear la tabla de usuarios
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
@@ -70,3 +71,5 @@ CREATE TABLE usuarios (
     cargo VARCHAR(50)
 );
 
+INSERT INTO usuarios (nombre, usuario, contrasena, cargo)
+VALUES ('Admin', 'admin', '123456', 'tecnico');
