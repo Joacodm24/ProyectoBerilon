@@ -61,3 +61,12 @@ CREATE TABLE Talleres (
     fecha DATE,
     hora TIME
 );
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    usuario VARCHAR(50) UNIQUE,
+    contrasena VARCHAR(255),
+    cargo VARCHAR(50)
+);
+

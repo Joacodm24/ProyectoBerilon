@@ -1,16 +1,49 @@
 <?php
+session_start();
+require_once __DIR__ . '/../model/loginModel.php';
 
-// Redirige a la vista por defecto si no se especifica la URL
-if (!isset($_GET['url'])) {
-    header("Location: ?url=login");
+$loginModel = new loginModel();
+
+// petición POST de login
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && $_POST['accion'] === 'login') {
+    header('Content-Type: application/json');
+
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    if (empty($username) || empty($password)) {
+        echo json_encode(['success' => false, 'message' => 'Complete todos los campos.']);
+        exit;
+    }
+
+    $usuario = $loginModel->obtenerUsuarioPorUsername($username);
+
+    if ($usuario) {
+        if ($password === $usuario['contrasena']) { 
+            $_SESSION['usuario'] = [
+                'nombre' => $usuario['nombre'],
+                'usuario' => $usuario['usuario'],
+                'cargo' => $usuario['cargo']
+            ];
+            $_SESSION['logueado'] = true;
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta.']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Usuario no encontrado.']);
+    }
+
     exit;
 }
 
-// Carga la vista de login si la URL es 'login'
-if ($_GET['url'] === 'login') {
-    require 'app/view/login.php';
-} else {
-    // Muestra error 404 si la ruta no es válida
-    http_response_code(404);
-    echo "Error 404: Página no encontrada.";
+
+// Capturar mensaje de logout si existe
+$mensaje = '';
+if (isset($_SESSION['mensaje_logout'])) {
+    $mensaje = $_SESSION['mensaje_logout'];
+    unset($_SESSION['mensaje_logout']);
 }
+
+// Mostrar la vista
+require_once __DIR__ . '/../view/login.php';

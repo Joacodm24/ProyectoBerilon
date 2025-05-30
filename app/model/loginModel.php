@@ -1,16 +1,21 @@
 <?php
 
-// Redirige a la vista por defecto si no se especifica la URL
-if (!isset($_GET['url'])) {
-    header("Location: ?url=login");
-    exit;
-}
+require_once __DIR__ . '/../config/Database.php';
 
-// Carga la vista de login si la URL es 'login'
-if ($_GET['url'] === 'login') {
-    require 'app/view/login.php';
-} else {
-    // Muestra error 404 si la ruta no es válida
-    http_response_code(404);
-    echo "Error 404: Página no encontrada.";
+class loginModel
+{
+    private $pdo;
+
+    public function __construct()
+    {
+        $database = new Database();
+        $this->pdo = $database->connect();
+    }
+
+    public function obtenerUsuarioPorUsername($username)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios WHERE usuario = :usuario LIMIT 1");
+        $stmt->execute(['usuario' => $username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
