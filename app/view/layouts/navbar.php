@@ -30,6 +30,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="?pagina=Clientes">Gestionar Cliente</a></li>
+            <li><a class="dropdown-item" href="?pagina=Empresas">Gestionar Empresas</a></li> <!-- NUEVO: Enlace a Empresas -->
             <li><a class="dropdown-item" href="?pagina=Tecnicos">Gestionar Personal Técnico</a></li>
           </ul>
         </li>
@@ -41,8 +42,8 @@
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="?pagina=Solicitudes">Gestionar Solicitudes</a></li>
-            <li><a class="dropdown-item" href="?pagina=Recursos">Gestionar Recursos Tecnológicos</a></li>
-            <li><a class="dropdown-item" href="?pagina=Talleres">Gestión de Talleres</a></li>
+            <li><a class="dropdown-item" href="?pagina=Catalogo">Gestionar Catalogo</a></li>
+            <li><a class="dropdown-item" href="?pagina=OrdenTrabajo">Gestión de OrdenTrabajo</a></li>
           </ul>
         </li>
 

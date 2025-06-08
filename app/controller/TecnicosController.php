@@ -1,60 +1,76 @@
 <?php
-require_once __DIR__ . '/../model/TecnicosModel.php';
 
-$model = new TecnicosModel();
-$accion = $_POST['accion'] ?? null;
-$error = null;
+use App\Model\TecnicosModel;
 
-if ($accion === 'crear') {
-    if ($model->cedulaExiste($_POST['cedula'])) {
-        $error = "La cédula ya está registrada.";
-    } else {
-        try {
-            $model->crearTecnico([
-                ':cedula'           => $_POST['cedula'],
-                ':nombre'           => $_POST['nombre'],
-                ':apellido'         => $_POST['apellido'],
-                ':cargo'            => $_POST['cargo'],
-                ':direccion'        => $_POST['direccion'],
-                ':correo'           => $_POST['correo'],
-                ':telefono'         => $_POST['telefono'],
-                ':cursos_realizados'=> $_POST['cursos_realizados'],
-            ]);
-            header("Location: index.php?pagina=tecnicos");
-            exit;
-        } catch (PDOException $e) {
-            $error = "Error al registrar el técnico.";
-        }
+$tecnicoModel = new TecnicosModel();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $accion = $_POST['accion'] ?? '';
+    header('Content-Type: application/json');
+
+    switch ($accion) {
+        case 'listar':
+            $tecnicos = $tecnicoModel->listarTecnicos();
+            echo json_encode($tecnicos);
+            break;
+
+        case 'crear':
+            // Validación de campos obligatorios
+            if (empty($_POST['cedula']) || empty($_POST['nombre']) || empty($_POST['apellido']) || empty($_POST['correo'])) {
+                echo json_encode(['estado' => 'error', 'mensaje' => 'Cédula, Nombre, Apellido y Correo son obligatorios.']);
+                break;
+            }
+
+            $datos = [
+                'cedula' => $_POST['cedula'],
+                'nombre' => $_POST['nombre'],
+                'apellido' => $_POST['apellido'],
+                'cargo' => $_POST['cargo'] ?? null,
+                'direccion' => $_POST['direccion'] ?? null,
+                'correo' => $_POST['correo'],
+                'telefono' => $_POST['telefono'] ?? null,
+                'especializacion' => $_POST['especializacion'] ?? null
+            ];
+            $resultado = $tecnicoModel->crearTecnico($datos);
+            echo json_encode($resultado);
+            break;
+
+        case 'modificar':
+            // Validación de campos obligatorios, incluyendo la cédula para identificar el técnico a modificar
+            if (empty($_POST['cedula']) || empty($_POST['nombre']) || empty($_POST['apellido']) || empty($_POST['correo'])) {
+                echo json_encode(['estado' => 'error', 'mensaje' => 'Cédula, Nombre, Apellido y Correo son obligatorios para modificar.']);
+                break;
+            }
+
+            $datos = [
+                'cedula' => $_POST['cedula'], 
+                'nombre' => $_POST['nombre'],
+                'apellido' => $_POST['apellido'],
+                'cargo' => $_POST['cargo'] ?? null,
+                'direccion' => $_POST['direccion'] ?? null,
+                'correo' => $_POST['correo'],
+                'telefono' => $_POST['telefono'] ?? null,
+                'especializacion' => $_POST['especializacion'] ?? null
+            ];
+            $resultado = $tecnicoModel->modificarTecnico($datos);
+            echo json_encode($resultado);
+            break;
+
+        case 'eliminar':
+            if (empty($_POST['cedula'])) { 
+                echo json_encode(['estado' => 'error', 'mensaje' => 'Cédula del técnico no válida para eliminar.']);
+                break;
+            }
+            $cedula = $_POST['cedula']; 
+            $resultado = $tecnicoModel->eliminarTecnico($cedula);
+            echo json_encode($resultado);
+            break;
+
+        default:
+            echo json_encode(['estado' => 'error', 'mensaje' => 'Acción no válida']);
     }
-} elseif ($accion === 'eliminar') {
-    try {
-        $model->eliminarTecnico($_POST['cedula']);
-        header("Location: index.php?pagina=tecnicos");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Error al eliminar el técnico.";
-    }
-} elseif ($accion === 'modificar') {
-    try {
-        $model->actualizarTecnico([
-            ':cedula'           => $_POST['cedula'],
-            ':nombre'           => $_POST['nombre'],
-            ':apellido'         => $_POST['apellido'],
-            ':cargo'            => $_POST['cargo'],
-            ':direccion'        => $_POST['direccion'],
-            ':correo'           => $_POST['correo'],
-            ':telefono'         => $_POST['telefono'],
-            ':cursos_realizados'=> $_POST['cursos_realizados'],
-        ]);
-        header("Location: index.php?pagina=tecnicos");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Error al modificar el técnico.";
-    }
+    exit;
+} else {
+    // Cargar la vista
+    include 'app/View/TecnicosView.php';
 }
-
-// Obtener todos los técnicos
-$tecnicos = $model->obtenerTecnicos();
-
-// Cargar la vista, pasando $error y $tecnicos
-require_once __DIR__ . '/../view/TecnicosView.php';

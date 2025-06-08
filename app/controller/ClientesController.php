@@ -1,65 +1,74 @@
 <?php
 
-require_once __DIR__ . '/../model/ClientesModel.php';
+use App\Model\ClientesModel;
 
-$model = new ClientesModel();
-$accion = $_POST['accion'] ?? null;
-$error = null;
+$clienteModel = new ClientesModel();
 
-if ($accion === 'crear') {
-    if ($model->cedulaExiste($_POST['cedula'])) {
-        $error = "La cédula ya está registrada.";
-    } else {
-        try {
-            $model->crear([
-                ':cedula'       => $_POST['cedula'],
-                ':nombre'       => $_POST['nombre'],
-                ':apellido'     => $_POST['apellido'],
-                ':correo'       => $_POST['correo'],
-                ':telefono'     => $_POST['telefono'],
-                ':direccion'    => $_POST['direccion'],
-                ':organizacion' => $_POST['organizacion'],
-                ':sede'         => $_POST['sede']
-            ]);
-            header("Location: index.php?pagina=clientes");
-            exit;
-        } catch (PDOException $e) {
-            $error = "Error al registrar el cliente.";
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $accion = $_POST['accion'] ?? '';
+    header('Content-Type: application/json'); // Asegurarse de que el encabezado se envíe siempre
+
+    switch ($accion) {
+        case 'listar':
+            $clientes = $clienteModel->listarClientes();
+            echo json_encode($clientes); 
+            break;
+
+        case 'crear':
+            // Validar que la cédula no exista antes de crear
+            if ($clienteModel->clienteExiste($_POST['cedula'])) {
+                echo json_encode(['estado' => 'error', 'mensaje' => 'La cédula ya está registrada.']);
+                break;
+            }
+
+            $datos = [
+                'cedula' => $_POST['cedula'],
+                'nombre' => $_POST['nombre'],
+                'apellido' => $_POST['apellido'],
+                'correo' => $_POST['correo'],
+                'telefono' => $_POST['telefono'],
+                'direccion' => $_POST['direccion']
+    
+            ];
+            $resultado = $clienteModel->crearCliente($datos);
+            echo json_encode($resultado);
+            break;
+
+        case 'modificar':
+        
+            if (!isset($_POST['cedula']) || empty($_POST['cedula'])) {
+                echo json_encode(['estado' => 'error', 'mensaje' => 'Cédula de cliente no válida para modificar.']);
+                break;
+            }
+
+            $datos = [
+                'cedula' => $_POST['cedula'], 
+                'nombre' => $_POST['nombre'],
+                'apellido' => $_POST['apellido'],
+                'correo' => $_POST['correo'],
+                'telefono' => $_POST['telefono'],
+                'direccion' => $_POST['direccion']
+                
+            ];
+            $resultado = $clienteModel->modificarCliente($datos);
+            echo json_encode($resultado);
+            break;
+
+        case 'eliminar':
+            if (!isset($_POST['cedula']) || empty($_POST['cedula'])) {
+                echo json_encode(['estado' => 'error', 'mensaje' => 'Cédula de cliente no válida para eliminar.']);
+                break;
+            }
+            $cedula_cliente = $_POST['cedula'];
+            $resultado = $clienteModel->eliminarCliente($cedula_cliente);
+            echo json_encode($resultado);
+            break;
+
+        default:
+            echo json_encode(['estado' => 'error', 'mensaje' => 'Acción no válida']);
     }
+    exit; // Termina la ejecución del script para AJAX
+} else {
+    // Cargar la vista
+    include 'app/View/ClientesView.php';
 }
-
-elseif ($accion === 'eliminar') {
-    try {
-        $model->eliminar($_POST['cedula']);
-        header("Location: index.php?pagina=clientes");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Error al eliminar el cliente.";
-    }
-}
-
-elseif ($accion === 'modificar') {
-    try {
-        $model->modificar([
-            ':cedula'       => $_POST['cedula'],
-            ':nombre'       => $_POST['nombre'],
-            ':apellido'     => $_POST['apellido'],
-            ':correo'       => $_POST['correo'],
-            ':telefono'     => $_POST['telefono'],
-            ':direccion'    => $_POST['direccion'],
-            ':organizacion' => $_POST['organizacion'],
-            ':sede'         => $_POST['sede']
-        ]);
-        header("Location: index.php?pagina=clientes");
-        exit;
-    } catch (PDOException $e) {
-        $error = "Error al modificar el cliente.";
-    }
-}
-
-// Obtener todos los clientes
-$clientes = $model->obtenerTodos();
-
-// Cargar la vista
-require __DIR__ . '/../view/ClientesView.php';

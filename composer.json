@@ -1,16 +1,16 @@
 {
-    "name": "app/mvc_2025",
-    "description": "Practica mvc",
+    "name": "berilion/sistema",
+    "description": "SISTEMA DE INFORMACIÓN PARA LA GESTIÓN DE SOPORTE TÉCNICO EN LA EMPRESA BERILION",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "App\\Mvc2025\\": "app/"
+            "App\\": "app/"
         }
     },
     "authors": [
         {
-            "name": "SabrinaC19",
-            "email": "sabrii.colmenarez@gmail.com"
+            "name": "Berilion",
+            "email": "joaquinmendoza240@gmail.com"
         }
     ],
     "minimum-stability": "beta",
