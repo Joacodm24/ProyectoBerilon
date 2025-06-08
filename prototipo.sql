@@ -159,10 +159,13 @@ INSERT INTO orden_de_trabajo (solicitud_id, tecnico_cedula, codigo_herramienta_a
 (3, 'V-10000002', 'HERR001', '2024-05-30', 'Av. Libertador, Edif. B, Apto 5, Valencia', 'Pendiente', 'Mantenimiento Preventivo', 'Limpieza interna y revisión de componentes.'),
 (4, 'V-10000004', 'HERR005', '2024-05-31', 'Calle 5, Centro Empresarial, Valencia', 'Asignada', 'Instalación de Red', 'Tendido de cables y configuración de switches.'),
 (5, 'V-10000006', 'HERR007', '2024-06-01', 'Residencias El Sol, Apt. 3A, Maracay', 'Completada', 'Revisión de Periféricos', 'Reconfiguración de controladores de impresora.'),
-(6, 'V-10000003', 'HERR008', '2024-06-02', 'Urb. Industrial, Galpón 10, Maracay', 'Asignada', 'Instalación de Seguridad', 'Montaje de cámaras y configuración NVR.'),
+(6, 'V-10000003', 'HERR003', '2024-06-02', 'Urb. Industrial, Galpón 10, Maracay', 'Asignada', 'Instalación de Seguridad', 'Montaje de cámaras y configuración NVR.'),
 (7, 'V-10000007', 'HERR004', '2024-06-03', 'Boulevard Digital, Oficina 501, Barquisimeto', 'En Curso', 'Recuperación de Datos', 'Uso de software especializado para HDD.');
 
 
 -- Insertar usuario de ejemplo (1 registro)
 INSERT INTO usuarios (nombre, usuario, contrasena, cargo)
 VALUES ('Admin', 'admin', '123456', 'tecnico');
+
+-- Habilitar la verificación de claves foráneas
+SET FOREIGN_KEY_CHECKS = 1;
